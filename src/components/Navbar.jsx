@@ -9,7 +9,6 @@ export default function Navbar() {
     setOpen(!open);
   }
 
-  // Close mobile menu when clicking outside or on route change
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -24,7 +23,6 @@ export default function Navbar() {
     <nav className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-lg sticky top-0 z-50 backdrop-blur-sm bg-opacity-95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <Link 
             to="/" 
             className="flex items-center space-x-2 group"
@@ -34,7 +32,6 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
             <NavLink
               to="/dashboard"
@@ -115,9 +112,23 @@ export default function Navbar() {
                 </>
               )}
             </NavLink>
+
+            <div className="ml-4 pl-4 border-l border-slate-700 flex items-center gap-2">
+              <Link
+                to="/login"
+                className="px-4 py-2 rounded-lg font-medium text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 transition-all duration-300"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="px-4 py-2 rounded-lg font-medium text-sm bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105"
+              >
+                Register
+              </Link>
+            </div>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/50 transition-all duration-300"
             onClick={toggleMenu}
@@ -131,8 +142,7 @@ export default function Navbar() {
           </button>
         </div>
       </div>
-
-      {/* Mobile Menu */}
+ 
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
           open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
@@ -194,6 +204,23 @@ export default function Navbar() {
           >
             Calendar
           </NavLink>
+
+          <div className="pt-4 mt-4 border-t border-slate-700 space-y-2">
+            <Link
+              to="/login"
+              onClick={toggleMenu}
+              className="block px-4 py-3 rounded-lg font-medium text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 transition-all duration-300 text-center"
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              onClick={toggleMenu}
+              className="block px-4 py-3 rounded-lg font-medium text-sm bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-all duration-300 text-center"
+            >
+              Register
+            </Link>
+          </div>
         </div>
       </div>
     </nav>

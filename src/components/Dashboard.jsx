@@ -94,7 +94,6 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-extrabold text-white mb-2">
             Dashboard
@@ -104,7 +103,6 @@ export default function Dashboard() {
           </p>
         </div>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
@@ -132,9 +130,7 @@ export default function Dashboard() {
           })}
         </div>
 
-        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Recent Tasks */}
           <div className="lg:col-span-2">
             <div className="rounded-xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 p-6">
               <div className="flex items-center justify-between mb-6">
@@ -173,7 +169,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Projects Progress */}
           <div>
             <div className="rounded-xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 p-6">
               <div className="flex items-center justify-between mb-6">
@@ -210,7 +205,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Quick Actions */}
         <div className="mt-8 rounded-xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 p-6">
           <h2 className="text-xl font-bold text-white flex items-center gap-2 mb-6">
             <BarChart3 className="w-5 h-5 text-green-400" />
