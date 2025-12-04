@@ -13,6 +13,8 @@ export default function PetDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [liking, setLiking] = useState(false);
 
   useEffect(() => {
     const fetchPet = async () => {
@@ -35,9 +37,15 @@ export default function PetDetails() {
 
         setPet(data);
         
-        // Check if current user is the owner
         if (isAuthenticated && user && data.owner_id === user.id) {
           setIsOwner(true);
+        }
+
+        if (isAuthenticated && user) {
+          const likedPets = JSON.parse(localStorage.getItem('likedPets') || '[]');
+          if (likedPets.includes(id)) {
+            setIsLiked(true);
+          }
         }
       } catch (err) {
         console.error('Error fetching pet:', err);
@@ -74,6 +82,66 @@ export default function PetDetails() {
     }
   };
 
+  const handleLike = async () => {
+    if (!isAuthenticated || !user) {
+      alert('Please log in to like pets');
+      return;
+    }
+
+    if (isOwner) {
+      alert('You cannot like your own pet');
+      return;
+    }
+
+    try {
+      setLiking(true);
+
+      const likedPets = JSON.parse(localStorage.getItem('likedPets') || '[]');
+
+      if (isLiked) {
+        const { error: updateError } = await supabase
+          .from('pets')
+          .update({ likes: Math.max(0, (pet.likes || 0) - 1) })
+          .eq('id', id);
+
+        if (updateError) {
+          console.error('Update pets likes error:', updateError);
+          throw updateError;
+        }
+
+        const updatedLikedPets = likedPets.filter((petId) => petId !== id);
+        localStorage.setItem('likedPets', JSON.stringify(updatedLikedPets));
+
+        setIsLiked(false);
+        setPet(prev => ({ ...prev, likes: Math.max(0, (prev.likes || 0) - 1) }));
+      } else {
+        const { error: updateError } = await supabase
+          .from('pets')
+          .update({ likes: (pet.likes || 0) + 1 })
+          .eq('id', id);
+
+        if (updateError) {
+          console.error('Update pets likes error:', updateError);
+          throw updateError;
+        }
+
+        if (!likedPets.includes(id)) {
+          likedPets.push(id);
+          localStorage.setItem('likedPets', JSON.stringify(likedPets));
+        }
+
+        setIsLiked(true);
+        setPet(prev => ({ ...prev, likes: (prev.likes || 0) + 1 }));
+      }
+    } catch (err) {
+      console.error('Error toggling like:', err);
+      const errorMessage = err.message || err.error_description || err.details || 'Failed to update like. Please try again.';
+      alert(`Error: ${errorMessage}`);
+    } finally {
+      setLiking(false);
+    }
+  };
+
   if (loading) {
     return <LoadingSpinner fullScreen text="Loading pet details..." />;
   }
@@ -106,7 +174,6 @@ export default function PetDetails() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Back Button */}
         <Link
           to="/pets"
           className="inline-flex items-center gap-2 text-slate-400 hover:text-white mb-6 transition-colors"
@@ -116,7 +183,6 @@ export default function PetDetails() {
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Pet Image */}
           <div className="relative">
             <div className="relative h-96 lg:h-[500px] rounded-xl overflow-hidden bg-slate-700/30 border border-slate-700/50">
               {pet.image_url ? (
@@ -137,16 +203,13 @@ export default function PetDetails() {
               )}
             </div>
             
-            {/* Likes Badge */}
             <div className="absolute top-4 right-4 flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/90 backdrop-blur-sm border border-slate-700/50">
-              <Heart className="w-5 h-5 text-red-400 fill-red-400" />
+              <Heart className={`w-5 h-5 ${isLiked ? 'text-red-400 fill-red-400' : 'text-red-400'}`} />
               <span className="text-white font-semibold">{pet.likes || 0}</span>
             </div>
           </div>
 
-          {/* Pet Info */}
           <div className="flex flex-col">
-            {/* Header */}
             <div className="mb-6">
               <div className="flex items-start justify-between mb-4">
                 <div>
@@ -164,7 +227,6 @@ export default function PetDetails() {
                 )}
               </div>
 
-              {/* Owner Actions */}
               {isOwner && (
                 <div className="flex gap-3 mb-6">
                   <Link
@@ -185,7 +247,6 @@ export default function PetDetails() {
               )}
             </div>
 
-            {/* Description */}
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-white mb-3">About {pet.name}</h2>
               <p className="text-slate-300 text-lg leading-relaxed">
@@ -193,7 +254,6 @@ export default function PetDetails() {
               </p>
             </div>
 
-            {/* Details Card */}
             <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 mb-6">
               <h3 className="text-xl font-bold text-white mb-4">Details</h3>
               <div className="space-y-3">
@@ -223,11 +283,27 @@ export default function PetDetails() {
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mt-auto">
-              <button className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50">
-                <Heart className="w-5 h-5" />
-                Like This Pet
+              <button
+                onClick={handleLike}
+                disabled={liking || isOwner || !isAuthenticated}
+                className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 font-semibold rounded-lg transition-all duration-300 ${
+                  isLiked
+                    ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white hover:scale-105 hover:shadow-lg hover:shadow-pink-500/50'
+                    : 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50'
+                } disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100`}
+              >
+                {liking ? (
+                  <>
+                    <LoadingSpinner size="sm" />
+                    {isLiked ? 'Unliking...' : 'Liking...'}
+                  </>
+                ) : (
+                  <>
+                    <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
+                    {isLiked ? 'Unlike This Pet' : 'Like This Pet'}
+                  </>
+                )}
               </button>
               <button className="flex-1 px-6 py-4 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 hover:border-slate-500/50 text-white font-semibold rounded-lg transition-all duration-300">
                 Contact Owner
