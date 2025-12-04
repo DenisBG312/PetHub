@@ -1,19 +1,19 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
+import ScrollToTop from "./components/ScrollToTop";
 import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import PrivateRoute from "./components/guards/PrivateRoute";
 
-// Pet pages
+
 import PetsCatalog from "./components/pets/PetsCatalog";
 import PetDetails from "./components/pets/PetDetails";
 import CreatePet from "./components/pets/CreatePet";
 import EditPet from "./components/pets/EditPet";
 
-// Other pages
 import SheltersPage from "./components/shelters/SheltersPage";
 import FavoritesPage from "./components/favorites/FavoritesPage";
 import EventsPage from "./components/events/EventsPage";
@@ -25,6 +25,7 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Navbar />
 
         <Routes>

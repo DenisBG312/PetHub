@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { LogIn, Mail, Lock, ArrowRight, Sparkles } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import LoadingSpinner from "./ui/LoadingSpinner";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -137,7 +138,7 @@ export default function Login() {
               className="group relative w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
               {loading ? (
-                <>Loading...</>
+                <LoadingSpinner size="sm" />
               ) : (
                 <>
                   <LogIn className="w-4 h-4" />
