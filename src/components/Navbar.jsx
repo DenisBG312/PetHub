@@ -31,8 +31,8 @@ export default function Navbar() {
     <nav className="w-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-lg sticky top-0 z-50 backdrop-blur-sm bg-opacity-95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="flex items-center space-x-2 group"
           >
             <div className="text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent tracking-tight transition-all duration-300 group-hover:scale-105">
@@ -44,10 +44,9 @@ export default function Navbar() {
             <NavLink
               to="/pets"
               className={({ isActive }) =>
-                `relative px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
-                  isActive
-                    ? "text-white bg-gradient-to-r from-blue-500/20 to-purple-500/20"
-                    : "text-slate-300 hover:text-white hover:bg-slate-700/50"
+                `relative px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${isActive
+                  ? "text-white bg-gradient-to-r from-blue-500/20 to-purple-500/20"
+                  : "text-slate-300 hover:text-white hover:bg-slate-700/50"
                 }`
               }
             >
@@ -66,10 +65,9 @@ export default function Navbar() {
                 <NavLink
                   to="/adopted-pets"
                   className={({ isActive }) =>
-                    `relative px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
-                      isActive
-                        ? "text-white bg-gradient-to-r from-green-500/20 to-emerald-500/20"
-                        : "text-slate-300 hover:text-white hover:bg-slate-700/50"
+                    `relative px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${isActive
+                      ? "text-white bg-gradient-to-r from-green-500/20 to-emerald-500/20"
+                      : "text-slate-300 hover:text-white hover:bg-slate-700/50"
                     }`
                   }
                 >
@@ -94,10 +92,9 @@ export default function Navbar() {
                   <NavLink
                     to="/profile"
                     className={({ isActive }) =>
-                      `px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
-                        isActive
-                          ? "text-white bg-gradient-to-r from-blue-500/20 to-purple-500/20"
-                          : "text-slate-300 hover:text-white hover:bg-slate-700/50"
+                      `px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${isActive
+                        ? "text-white bg-gradient-to-r from-blue-500/20 to-purple-500/20"
+                        : "text-slate-300 hover:text-white hover:bg-slate-700/50"
                       }`
                     }
                   >
@@ -145,21 +142,19 @@ export default function Navbar() {
           </button>
         </div>
       </div>
- 
+
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="px-4 pt-2 pb-4 space-y-1 bg-slate-800/50 backdrop-blur-sm border-t border-slate-700/50">
           <NavLink
             to="/pets"
             onClick={toggleMenu}
             className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg font-medium text-sm transition-all duration-300 ${
-                isActive
-                  ? "text-white bg-gradient-to-r from-blue-500/30 to-purple-500/30 border-l-4 border-blue-400"
-                  : "text-slate-300 hover:text-white hover:bg-slate-700/50"
+              `block px-4 py-3 rounded-lg font-medium text-sm transition-all duration-300 ${isActive
+                ? "text-white bg-gradient-to-r from-blue-500/30 to-purple-500/30 border-l-4 border-blue-400"
+                : "text-slate-300 hover:text-white hover:bg-slate-700/50"
               }`
             }
           >
@@ -172,10 +167,9 @@ export default function Navbar() {
                 to="/adopted-pets"
                 onClick={toggleMenu}
                 className={({ isActive }) =>
-                  `block px-4 py-3 rounded-lg font-medium text-sm transition-all duration-300 ${
-                    isActive
-                      ? "text-white bg-gradient-to-r from-green-500/30 to-emerald-500/30 border-l-4 border-green-400"
-                      : "text-slate-300 hover:text-white hover:bg-slate-700/50"
+                  `block px-4 py-3 rounded-lg font-medium text-sm transition-all duration-300 ${isActive
+                    ? "text-white bg-gradient-to-r from-green-500/30 to-emerald-500/30 border-l-4 border-green-400"
+                    : "text-slate-300 hover:text-white hover:bg-slate-700/50"
                   }`
                 }
               >
@@ -189,6 +183,19 @@ export default function Navbar() {
               <div className="px-4 py-3 text-slate-300 text-sm">
                 Hello, <span className="text-white font-semibold">{getUserName()}</span>
               </div>
+
+              <NavLink
+                to="/profile"
+                onClick={toggleMenu}
+                className={({ isActive }) =>
+                  `block px-4 py-3 rounded-lg font-medium text-sm transition-all duration-300 ${isActive
+                    ? "text-white bg-gradient-to-r from-blue-500/30 to-purple-500/30 border-l-4 border-blue-400"
+                    : "text-slate-300 hover:text-white hover:bg-slate-700/50"
+                  }`
+                }
+              >
+                My Profile
+              </NavLink>
             </>
           )}
 
