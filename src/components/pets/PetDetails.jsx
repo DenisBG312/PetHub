@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Heart, ArrowLeft, Calendar, User, Edit, Trash2 } from 'lucide-react';
+import { Heart, ArrowLeft, Calendar, User, Edit, Trash2, CheckCircle } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import LoadingSpinner from '../ui/LoadingSpinner';
 import { useAuth } from '../../contexts/AuthContext';
@@ -17,6 +17,8 @@ export default function PetDetails() {
   const [isLiked, setIsLiked] = useState(false);
   const [liking, setLiking] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [adopting, setAdopting] = useState(false);
+  const [isAdopted, setIsAdopted] = useState(false);
 
   useEffect(() => {
     const fetchPet = async () => {
@@ -41,6 +43,10 @@ export default function PetDetails() {
         
         if (isAuthenticated && user && data.owner_id === user.id) {
           setIsOwner(true);
+        }
+
+        if (data.adopted_by) {
+          setIsAdopted(true);
         }
 
         if (isAuthenticated && user) {
@@ -145,7 +151,6 @@ export default function PetDetails() {
   };
 
   const handleEditSuccess = async () => {
-    // Refresh pet data after successful edit
     try {
       const { data, error: fetchError } = await supabase
         .from('pets')
@@ -160,6 +165,48 @@ export default function PetDetails() {
       }
     } catch (err) {
       console.error('Error refreshing pet data:', err);
+    }
+  };
+
+  const handleAdopt = async () => {
+    if (!isAuthenticated || !user) {
+      alert('Please log in to adopt a pet');
+      return;
+    }
+
+    if (isOwner) {
+      alert('You cannot adopt your own pet');
+      return;
+    }
+
+    if (isAdopted) {
+      alert('This pet has already been adopted');
+      return;
+    }
+
+    if (!window.confirm(`Are you sure you want to adopt ${pet.name}? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      setAdopting(true);
+
+      const { error: updateError } = await supabase
+        .from('pets')
+        .update({ adopted_by: user.id })
+        .eq('id', id);
+
+      if (updateError) throw updateError;
+
+      setIsAdopted(true);
+      setPet(prev => ({ ...prev, adopted_by: user.id }));
+      alert(`Congratulations! You have successfully adopted ${pet.name}!`);
+    } catch (err) {
+      console.error('Error adopting pet:', err);
+      const errorMessage = err.message || err.error_description || err.details || 'Failed to adopt pet. Please try again.';
+      alert(`Error: ${errorMessage}`);
+    } finally {
+      setAdopting(false);
     }
   };
 
@@ -239,13 +286,23 @@ export default function PetDetails() {
                   </h1>
                   <p className="text-xl text-slate-400">{pet.breed || 'Mixed Breed'}</p>
                 </div>
-                {pet.age && (
-                  <div className="px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30">
-                    <span className="text-blue-400 font-semibold">
-                      {pet.age} {pet.age === 1 ? 'year' : 'years'} old
-                    </span>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  {pet.age && (
+                    <div className="px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30">
+                      <span className="text-blue-400 font-semibold">
+                        {pet.age} {pet.age === 1 ? 'year' : 'years'} old
+                      </span>
+                    </div>
+                  )}
+                  {isAdopted && (
+                    <div className="px-4 py-2 rounded-lg bg-green-500/20 border border-green-500/30">
+                      <span className="text-green-400 font-semibold flex items-center gap-1">
+                        <CheckCircle className="w-4 h-4" />
+                        Adopted
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {isOwner && (
@@ -305,9 +362,34 @@ export default function PetDetails() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 mt-auto">
+              {!isAdopted && !isOwner && isAuthenticated && (
+                <button
+                  onClick={handleAdopt}
+                  disabled={adopting}
+                  className="flex-1 flex items-center justify-center gap-2 px-6 py-4 font-semibold rounded-lg transition-all duration-300 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                >
+                  {adopting ? (
+                    <>
+                      <LoadingSpinner size="sm" />
+                      Adopting...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="w-5 h-5" />
+                      Adopt This Pet
+                    </>
+                  )}
+                </button>
+              )}
+              {isAdopted && (
+                <div className="flex-1 flex items-center justify-center gap-2 px-6 py-4 font-semibold rounded-lg bg-green-500/20 border border-green-500/30 text-green-400">
+                  <CheckCircle className="w-5 h-5" />
+                  This Pet Has Been Adopted
+                </div>
+              )}
               <button
                 onClick={handleLike}
-                disabled={liking || isOwner || !isAuthenticated}
+                disabled={liking || isOwner || !isAuthenticated || isAdopted}
                 className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 font-semibold rounded-lg transition-all duration-300 ${
                   isLiked
                     ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white hover:scale-105 hover:shadow-lg hover:shadow-pink-500/50'

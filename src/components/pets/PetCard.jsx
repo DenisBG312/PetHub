@@ -1,18 +1,24 @@
 import { Link } from 'react-router-dom';
-import { Heart } from 'lucide-react';
+import { Heart, CheckCircle } from 'lucide-react';
 
 export default function PetCard({ pet }) {
   return (
     <Link
       to={`/pets/${pet.id}`}
-      className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-slate-900/50"
+      className={`group relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-slate-900/50 ${
+        pet.adopted_by 
+          ? 'border-slate-700/50 hover:border-slate-600/50' 
+          : 'border-slate-700/50 hover:border-slate-600/50'
+      }`}
     >
       <div className="relative h-64 overflow-hidden bg-slate-700/30">
         {pet.image_url ? (
           <img
             src={pet.image_url}
             alt={pet.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 ${
+              pet.adopted_by ? 'opacity-75' : ''
+            }`}
             onError={(e) => {
               e.target.src = 'https://via.placeholder.com/400x400?text=Pet+Image';
             }}
@@ -20,6 +26,13 @@ export default function PetCard({ pet }) {
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-purple-500/20">
             <img src="https://i.pinimg.com/736x/85/e1/c0/85e1c0161e9c0d4fe926550d7c6b26e0.jpg" alt="Placeholder Pet" />
+          </div>
+        )}
+
+        {pet.adopted_by && (
+          <div className="absolute top-4 left-4 flex items-center gap-1 px-3 py-1.5 rounded-full bg-green-500/90 backdrop-blur-sm border border-green-400/50 shadow-lg">
+            <CheckCircle className="w-4 h-4 text-white" />
+            <span className="text-white text-xs font-semibold">Adopted</span>
           </div>
         )}
 

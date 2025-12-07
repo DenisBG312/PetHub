@@ -10,7 +10,7 @@ export default function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/dashboard", { replace: true });
+      navigate("/", { replace: true });
     }
   }, [isAuthenticated, navigate]);
   const [formData, setFormData] = useState({
@@ -42,7 +42,7 @@ export default function Login() {
     }
 
     if (data) {
-      navigate("/dashboard");
+      navigate("/");
     }
   };
 

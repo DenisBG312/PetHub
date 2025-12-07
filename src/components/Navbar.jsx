@@ -61,67 +61,29 @@ export default function Navbar() {
               )}
             </NavLink>
 
-            <NavLink
-              to="/shelters"
-              className={({ isActive }) =>
-                `relative px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
-                  isActive
-                    ? "text-white bg-gradient-to-r from-blue-500/20 to-purple-500/20"
-                    : "text-slate-300 hover:text-white hover:bg-slate-700/50"
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  Shelters
-                  {isActive && (
-                    <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></span>
-                  )}
-                </>
-              )}
-            </NavLink>
-
             {isAuthenticated && (
-              <NavLink
-                to="/favorites"
-                className={({ isActive }) =>
-                  `relative px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
-                    isActive
-                      ? "text-white bg-gradient-to-r from-blue-500/20 to-purple-500/20"
-                      : "text-slate-300 hover:text-white hover:bg-slate-700/50"
-                  }`
-                }
-              >
-                {({ isActive }) => (
-                  <>
-                    Favorites
-                    {isActive && (
-                      <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></span>
-                    )}
-                  </>
-                )}
-              </NavLink>
-            )}
-
-            <NavLink
-              to="/events"
-              className={({ isActive }) =>
-                `relative px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
-                  isActive
-                    ? "text-white bg-gradient-to-r from-blue-500/20 to-purple-500/20"
-                    : "text-slate-300 hover:text-white hover:bg-slate-700/50"
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  Events
-                  {isActive && (
-                    <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></span>
+              <>
+                <NavLink
+                  to="/adopted-pets"
+                  className={({ isActive }) =>
+                    `relative px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
+                      isActive
+                        ? "text-white bg-gradient-to-r from-green-500/20 to-emerald-500/20"
+                        : "text-slate-300 hover:text-white hover:bg-slate-700/50"
+                    }`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      My Adopted Pets
+                      {isActive && (
+                        <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full"></span>
+                      )}
+                    </>
                   )}
-                </>
-              )}
-            </NavLink>
+                </NavLink>
+              </>
+            )}
 
             <div className="ml-4 pl-4 border-l border-slate-700 flex items-center gap-3">
               {isAuthenticated ? (
@@ -130,7 +92,7 @@ export default function Navbar() {
                     Hello, <span className="text-white font-semibold">{getUserName()}</span>
                   </span>
                   <NavLink
-                    to="/dashboard"
+                    to="/profile"
                     className={({ isActive }) =>
                       `px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
                         isActive
@@ -139,7 +101,7 @@ export default function Navbar() {
                       }`
                     }
                   >
-                    Dashboard
+                    My Profile
                   </NavLink>
                   <button
                     onClick={() => {
@@ -204,49 +166,23 @@ export default function Navbar() {
             Browse Pets
           </NavLink>
 
-          <NavLink
-            to="/shelters"
-            onClick={toggleMenu}
-            className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg font-medium text-sm transition-all duration-300 ${
-                isActive
-                  ? "text-white bg-gradient-to-r from-blue-500/30 to-purple-500/30 border-l-4 border-blue-400"
-                  : "text-slate-300 hover:text-white hover:bg-slate-700/50"
-              }`
-            }
-          >
-            Shelters
-          </NavLink>
-
           {isAuthenticated && (
-            <NavLink
-              to="/favorites"
-              onClick={toggleMenu}
-              className={({ isActive }) =>
-                `block px-4 py-3 rounded-lg font-medium text-sm transition-all duration-300 ${
-                  isActive
-                    ? "text-white bg-gradient-to-r from-blue-500/30 to-purple-500/30 border-l-4 border-blue-400"
-                    : "text-slate-300 hover:text-white hover:bg-slate-700/50"
-                }`
-              }
-            >
-              Favorites
-            </NavLink>
+            <>
+              <NavLink
+                to="/adopted-pets"
+                onClick={toggleMenu}
+                className={({ isActive }) =>
+                  `block px-4 py-3 rounded-lg font-medium text-sm transition-all duration-300 ${
+                    isActive
+                      ? "text-white bg-gradient-to-r from-green-500/30 to-emerald-500/30 border-l-4 border-green-400"
+                      : "text-slate-300 hover:text-white hover:bg-slate-700/50"
+                  }`
+                }
+              >
+                My Adopted Pets
+              </NavLink>
+            </>
           )}
-
-          <NavLink
-            to="/events"
-            onClick={toggleMenu}
-            className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg font-medium text-sm transition-all duration-300 ${
-                isActive
-                  ? "text-white bg-gradient-to-r from-blue-500/30 to-purple-500/30 border-l-4 border-blue-400"
-                  : "text-slate-300 hover:text-white hover:bg-slate-700/50"
-              }`
-            }
-          >
-            Events
-          </NavLink>
 
           {isAuthenticated && (
             <>
