@@ -12,7 +12,7 @@ export default function PetsCatalog() {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterBreed, setFilterBreed] = useState('all');
+  const [filterAdoption, setFilterAdoption] = useState('all');
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -52,13 +52,13 @@ export default function PetsCatalog() {
       pet.breed?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       pet.description?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesBreed = filterBreed === 'all' ||
-      pet.breed?.toLowerCase().includes(filterBreed.toLowerCase());
+    const matchesAdoption =
+      filterAdoption === 'all' ||
+      (filterAdoption === 'adopted' && pet.adopted_by !== null) ||
+      (filterAdoption === 'not-adopted' && pet.adopted_by === null);
 
-    return matchesSearch && matchesBreed;
+    return matchesSearch && matchesAdoption;
   });
-
-  const uniqueBreeds = [...new Set(pets.map(pet => pet.breed).filter(Boolean))];
 
   const totalPages = Math.ceil(filteredPets.length / petsPerPage);
   const startIndex = (currentPage - 1) * petsPerPage;
@@ -67,7 +67,7 @@ export default function PetsCatalog() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, filterBreed]);
+  }, [searchTerm, filterAdoption]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -89,13 +89,13 @@ export default function PetsCatalog() {
             </p>
           </div>
           {user && (
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50"
-          >
-            <Plus className="w-5 h-5" />
-            Add Pet
-          </button>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50"
+            >
+              <Plus className="w-5 h-5" />
+              Add Pet
+            </button>
           )}
         </div>
 
@@ -123,14 +123,13 @@ export default function PetsCatalog() {
               <Filter className="h-5 w-5 text-slate-400" />
             </div>
             <select
-              value={filterBreed}
-              onChange={(e) => setFilterBreed(e.target.value)}
+              value={filterAdoption}
+              onChange={(e) => setFilterAdoption(e.target.value)}
               className="pl-10 pr-8 py-3 bg-slate-800/50 border border-slate-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all appearance-none cursor-pointer"
             >
-              <option value="all">All Breeds</option>
-              {uniqueBreeds.map(breed => (
-                <option key={breed} value={breed.toLowerCase()}>{breed}</option>
-              ))}
+              <option value="all">All Pets</option>
+              <option value="adopted">Adopted</option>
+              <option value="not-adopted">Not Adopted</option>
             </select>
           </div>
         </div>
@@ -180,11 +179,10 @@ export default function PetsCatalog() {
                         <button
                           key={page}
                           onClick={() => handlePageChange(page)}
-                          className={`min-w-[40px] px-3 py-2 rounded-lg font-semibold transition-all duration-300 ${
-                            currentPage === page
+                          className={`min-w-[40px] px-3 py-2 rounded-lg font-semibold transition-all duration-300 ${currentPage === page
                               ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-purple-500/50'
                               : 'bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 hover:border-slate-500/50 text-white'
-                          }`}
+                            }`}
                         >
                           {page}
                         </button>
@@ -220,7 +218,7 @@ export default function PetsCatalog() {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSuccess={handlePetCreated}
-        />  
+        />
       </div>
     </div>
   );
