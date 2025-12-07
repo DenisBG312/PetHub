@@ -408,9 +408,6 @@ export default function PetDetails() {
                   </>
                 )}
               </button>
-              <button className="flex-1 px-6 py-4 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 hover:border-slate-500/50 text-white font-semibold rounded-lg transition-all duration-300">
-                Contact Owner
-              </button>
             </div>
           </div>
         </div>
