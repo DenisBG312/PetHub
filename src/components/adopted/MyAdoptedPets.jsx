@@ -5,8 +5,10 @@ import { supabase } from '../../lib/supabase';
 import LoadingSpinner from '../ui/LoadingSpinner';
 import { useAuth } from '../../contexts/AuthContext';
 import PetCard from '../pets/PetCard';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function MyAdoptedPets() {
+  usePageTitle('My Adopted Pets');
   const { user, isAuthenticated } = useAuth();
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);

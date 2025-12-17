@@ -10,8 +10,10 @@ import {
   User,
   Sparkles
 } from "lucide-react";
+import usePageTitle from "../hooks/usePageTitle";
 
 export default function Home() {
+  usePageTitle("Find Your New Best Friend");
   const features = [
     {
       icon: Search,

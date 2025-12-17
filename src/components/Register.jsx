@@ -3,14 +3,16 @@ import { useState, useEffect } from "react";
 import { UserPlus, Mail, Lock, User, ArrowRight, Sparkles } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import LoadingSpinner from "./ui/LoadingSpinner";
+import usePageTitle from "../hooks/usePageTitle";
 
 export default function Register() {
+  usePageTitle("Register");
   const navigate = useNavigate();
   const { signUp, isAuthenticated } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/dashboard", { replace: true });
+      navigate("/", { replace: true });
     }
   }, [isAuthenticated, navigate]);
   const [formData, setFormData] = useState({

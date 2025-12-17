@@ -6,8 +6,10 @@ import LoadingSpinner from '../ui/LoadingSpinner';
 import CreatePetModal from './CreatePetModal';
 import PetCard from './PetCard';
 import { useAuth } from '../../contexts/AuthContext';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function PetsCatalog() {
+  usePageTitle('Browse All Pets');
   const { user } = useAuth();
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -4,12 +4,14 @@ import { Heart, ArrowLeft, Calendar, User, Edit, Trash2, CheckCircle, Share2 } f
 import { supabase } from '../../lib/supabase';
 import LoadingSpinner from '../ui/LoadingSpinner';
 import { useAuth } from '../../contexts/AuthContext';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function PetDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const [pet, setPet] = useState(null);
+  usePageTitle(pet ? `Details about ${pet.name}` : 'Pet Details');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);

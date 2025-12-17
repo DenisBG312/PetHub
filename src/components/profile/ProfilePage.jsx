@@ -4,8 +4,10 @@ import { User, Mail, Calendar, Heart, Plus, CheckCircle, Edit, Save, X } from 'l
 import { supabase } from '../../lib/supabase';
 import LoadingSpinner from '../ui/LoadingSpinner';
 import { useAuth } from '../../contexts/AuthContext';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function ProfilePage() {
+  usePageTitle('My Profile');
   const { user, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({

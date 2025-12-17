@@ -4,6 +4,7 @@ import { ArrowLeft, Upload, Save, X } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../ui/LoadingSpinner';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function PetEdit() {
   const { id } = useParams();
@@ -11,6 +12,7 @@ export default function PetEdit() {
   const { user } = useAuth();
 
   const [pet, setPet] = useState(null);
+  usePageTitle(pet ? `Edit ${pet.name}` : 'Edit Pet');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);

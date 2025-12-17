@@ -10,7 +10,6 @@ import PrivateRoute from "./components/guards/PrivateRoute";
 
 import PetsCatalog from "./components/pets/PetsCatalog";
 import PetDetails from "./components/pets/PetDetails";
-import CreatePet from "./components/pets/CreatePet";
 import EditPet from "./components/pets/PetEdit";
 
 import ProfilePage from "./components/profile/ProfilePage";
@@ -43,15 +42,6 @@ export default function App() {
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
-          <Route
-            path="/pets/create"
-            element={
-              <PrivateRoute>
-                <CreatePet />
-              </PrivateRoute>
-            }
-          />
 
           <Route
             path="/profile"
