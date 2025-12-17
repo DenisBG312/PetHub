@@ -10,22 +10,33 @@ export function AuthProvider({ children }) {
 
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setIsAuthenticated(!!session);
-      setLoading(false);
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    setUser(session?.user ?? null);
+    setIsAuthenticated(!!session);
+    setLoading(false);
+  });
+
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange((_event, session) => {
+    setUser((prevUser) => {
+      if (prevUser?.id === session?.user?.id) {
+        return prevUser;
+      }
+      return session?.user ?? null;
     });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      setIsAuthenticated(!!session);
-      setLoading(false);
+    setIsAuthenticated((prev) => {
+      const newAuth = !!session;
+      if (prev === newAuth) return prev;
+      return newAuth;
     });
 
-    return () => subscription.unsubscribe();
-  }, []);
+    setLoading(false);
+  });
+
+  return () => subscription.unsubscribe();
+}, []);
 
   const login = async (email, password) => {
     try {
